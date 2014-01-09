@@ -48,7 +48,7 @@
         _executing = NO;
         _finished = NO;
         _expectedSize = 0;
-        responseFromCached = YES; // Initially wrong until `connection:willCacheResponse:` is called or not called
+        responseFromCached = NO; // Initially wrong until `connection:willCacheResponse:` is called or not called
     }
     return self;
 }
@@ -381,7 +381,7 @@
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse
 {
-    responseFromCached = NO; // If this method is called, it means the response wasn't read from cache
+    responseFromCached = YES; // If this method is called, it means the response wasn't read from cache
     if (self.request.cachePolicy == NSURLRequestReloadIgnoringLocalCacheData)
     {
         // Prevents caching of responses

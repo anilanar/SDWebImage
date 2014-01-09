@@ -132,7 +132,30 @@
  *                       is nil and the second parameter may contain an NSError. The third parameter is a Boolean
  *                       indicating if the image was retrived from the local cache of from the network.
  */
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock;
+- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options before:(SDWebImageDownloaderBeforeBlock)beforeBlock progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock;
+
+/**
+ * Set the imageView `image` with an `url`, placeholder and custom options.
+ *
+ * The downloand is asynchronous and cached using cache key that is provided.
+ *
+ * @param url The url for the image.
+ * @param placeholder The image to be set initially, until the image request finishes.
+ * @param cacheKey The key that will be used to cache the image.
+ * @param options The options to use when downloading the image. @see SDWebImageOptions for the possible values.
+ * @param progressBlock A block called while image is downloading
+ * @param completedBlock A block called when operation has been completed. This block as no return value
+ *                       and takes the requested UIImage as first parameter. In case of error the image parameter
+ *                       is nil and the second parameter may contain an NSError. The third parameter is a Boolean
+ *                       indicating if the image was retrived from the local cache of from the network.
+
+ */
+- (void)setImageWithURL:(NSURL *)url
+                        placeholderImage:(UIImage *)placeholder
+                        cacheKey:(NSString *)cacheKey options:(SDWebImageOptions)options
+                        before:(SDWebImageDownloaderBeforeBlock)beforeBlock
+                        progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                        completed:(SDWebImageCompletedBlock)completedBlock;
 
 /**
  * Download an array of images and starts them in an animation loop

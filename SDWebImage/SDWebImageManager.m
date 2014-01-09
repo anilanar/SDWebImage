@@ -72,13 +72,10 @@
     return [self.imageCache diskImageExistsWithKey:key];
 }
 
-- (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedWithFinishedBlock)completedBlock
-{    
-    return [self downloadWithURL:url cacheKey: [url absoluteString] options:options progress:progressBlock completed:completedBlock];
-}
-
-- (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url cacheKey:(NSString *)key options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedWithFinishedBlock)completedBlock
+- (id<SDWebImageOperation>)downloadWithURL:(NSURL *)url cacheKey:(NSString *)key options:(SDWebImageOptions)options before:(SDWebImageDownloaderBeforeBlock)beforeBlock progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedWithFinishedBlock)completedBlock
 {
+    if(!key) key = [url absoluteString];
+        
     // Invoking this method without a completedBlock is pointless
     NSParameterAssert(completedBlock);
     
@@ -158,7 +155,7 @@
                 // ignore image read from NSURLCache if image if cached but force refreshing
                 downloaderOptions |= SDWebImageDownloaderIgnoreCachedResponse;
             }
-            id<SDWebImageOperation> subOperation = [self.imageDownloader downloadImageWithURL:url options:downloaderOptions progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished)
+            id<SDWebImageOperation> subOperation = [self.imageDownloader downloadImageWithURL:url cacheKey:key options:downloaderOptions before:beforeBlock progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished)
                 {
                     if (weakOperation.isCancelled)
                     {
